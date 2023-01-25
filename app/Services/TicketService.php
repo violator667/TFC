@@ -24,25 +24,6 @@ class TicketService
     {
         if($this->checkAdmin()) {
             if($status === null) {
-                return Cache::remember('tickets_default_'.request()->page, 120, function() {
-                    return Ticket::where('status_id', 1)->orWhere('status_id', 2)->latest()->paginate(15);
-                });
-            }else {
-                return Cache::remember('tickets_'.$status.'_'.request()->page, 120, function() {
-                    return Ticket::where('status_id', $status)->latest()->paginate(15);
-                });
-            }
-        }else {
-            return Cache::remember('tickets_user_'.request()->page, 120, function() {
-                return Ticket::where('user_id', Auth()->id())->latest()->paginate(15);
-            });
-        }
-    }
-
-    public function listTicketsA(int $status = null): object
-    {
-        if($this->checkAdmin()) {
-            if($status === null) {
                 return Cache::tags('tickets')->remember('tickets_default_'.request()->page, 120, function() {
                     return Ticket::where('status_id', 1)->orWhere('status_id', 2)->latest()->paginate(15);
                 });
